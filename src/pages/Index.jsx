@@ -1,6 +1,6 @@
 import { Container, VStack, Text, Input, Button, List, ListItem, ListIcon } from '@chakra-ui/react';
 import Confetti from 'react-confetti';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const Index = () => {
@@ -13,9 +13,17 @@ const Index = () => {
       setTodos([...todos, input.trim()]);
       setInput('');
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 2000); // Turn off confetti after 2 seconds
     }
   };
+
+  useEffect(() => {
+    if (showConfetti) {
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showConfetti]);
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
