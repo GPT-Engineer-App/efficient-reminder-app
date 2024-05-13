@@ -1,15 +1,19 @@
 import { Container, VStack, Text, Input, Button, List, ListItem, ListIcon } from '@chakra-ui/react';
+import Confetti from 'react-confetti';
 import { useState } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const Index = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handleAddTodo = () => {
     if (input.trim() !== '') {
       setTodos([...todos, input.trim()]);
       setInput('');
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000); // Turn off confetti after 2 seconds
     }
   };
 
@@ -29,6 +33,7 @@ const Index = () => {
           width="100%"
         />
         <Button onClick={handleAddTodo} colorScheme="blue" mt="4">Add Todo</Button>
+        {showConfetti && <Confetti />}
         <List spacing={3} mt="8" width="100%">
           {todos.map((todo, index) => (
             <ListItem key={index} display="flex" alignItems="center">
