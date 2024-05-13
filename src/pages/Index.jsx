@@ -10,7 +10,7 @@ const Index = () => {
 
   const handleAddTodo = () => {
     if (input.trim() !== '') {
-      setTodos([...todos, input.trim()]);
+      setTodos([...todos, { text: input.trim(), done: false }]);
       setInput('');
       setShowConfetti(true);
     }
@@ -24,6 +24,16 @@ const Index = () => {
       return () => clearTimeout(timer);
     }
   }, [showConfetti]);
+
+  const toggleTodoDone = (index) => {
+    const newTodos = todos.map((todo, idx) => {
+      if (idx === index) {
+        return { ...todo, done: !todo.done };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+  };
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -44,9 +54,9 @@ const Index = () => {
         {showConfetti && <Confetti />}
         <List spacing={3} mt="8" width="100%">
           {todos.map((todo, index) => (
-            <ListItem key={index} display="flex" alignItems="center">
-              <ListIcon as={FaCheckCircle} color="green.500" />
-              <Text ml="2">{todo}</Text>
+            <ListItem key={index} display="flex" alignItems="center" onClick={() => toggleTodoDone(index)} cursor="pointer">
+              <ListIcon as={FaCheckCircle} color={todo.done ? "green.500" : "gray.300"} />
+              <Text ml="2" textDecoration={todo.done ? "line-through" : "none"}>{todo.text}</Text>
             </ListItem>
           ))}
         </List>
